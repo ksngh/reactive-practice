@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  mariadb:
+    image: mariadb:10.6
+    container_name: r2dbc-mariadb
+    environment:
+      MARIADB_ROOT_PASSWORD: mypass
+      MARIADB_DATABASE: mydb
+      MARIADB_USER: user
+      MARIADB_PASSWORD: password
+    ports:
+      - "3307:3306"
+    restart: unless-stopped
