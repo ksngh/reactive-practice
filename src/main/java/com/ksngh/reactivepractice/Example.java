@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
 import java.util.Arrays;
 
 @RestController
@@ -70,5 +71,30 @@ public class Example {
         System.out.println("-------------------------");
         Thread.sleep(2000L);
         coldFlux.subscribe(country -> log.info("# Subscriber2: {}", country));
+    }
+
+    @GetMapping("/flux/07")
+    public void fluxReactivePractice7() throws InterruptedException {
+        String[] singers = {"Singer A","Singer B", "Singer C", "Singer D", "Singer E"};
+
+        log.info("# Begin concert:");
+
+        Flux<String> concertFlux =
+                Flux
+                        .fromArray(singers)
+                        .delayElements(Duration.ofSeconds(1))
+                        .share();
+
+        concertFlux.subscribe(
+                singer -> log.info("# Subscriber1 is watching {}'s song", singer)
+        );
+
+        Thread.sleep(2000L);
+
+        concertFlux.subscribe(
+                singer -> log.info("# Subscriber2 is watching {}'s song", singer)
+        );
+
+        Thread.sleep(3000L);
     }
 }
